@@ -12,4 +12,7 @@ public:
 	void Update();
 	void Draw();
 	~Skeleton();
+
+	static std::vector<Joint*> joints;
+	static std::vector<DOF*> DOFs;
 };

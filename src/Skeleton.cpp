@@ -4,6 +4,10 @@
 #include "Joint.h"
 #include <Tokenizer.h>
 #include "Skeleton.h"
+#include <Window.h>
+
+std::vector<Joint*> Skeleton::joints;
+std::vector<DOF*> Skeleton::DOFs;
 
 void Skeleton::Load(const char* filename) {
 	Tokenizer token;
@@ -22,6 +26,7 @@ void Skeleton::Update() {
 }
 
 void Skeleton::Draw() {
+	Window::cubes.clear();
 	root->Draw();
 }
 

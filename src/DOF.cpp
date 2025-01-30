@@ -43,3 +43,11 @@ float DOF::GetMin() {
 float DOF::GetMax() {
 	return max;
 }
+
+std::string DOF::GetName() {
+	return name;
+}
+
+void DOF::SetName(std::string nomen) {
+	name = nomen;
+}

@@ -1,6 +1,11 @@
 #include "Window.h"
 #include "core.h"
 #include <Skeleton.h>
+#include <Skin.h>
+
+Skeleton* skel;
+Skin* skin;
+int mode;
 
 void error_callback(int error, const char* description) {
     // Print error.
@@ -61,16 +66,56 @@ int main(int argc, char* argv[]) {
     // Initialize objects/pointers for rendering; exit if initialization fails.
     if (!Window::initializeObjects()) exit(EXIT_FAILURE);
 
-    //Process command-line input
-    char* filename = "test.skel";
-    if (argc >= 2) {
-        filename = argv[1];
-    } 
+    mode = 0;
 
-    Skeleton* skel = new Skeleton();
-    skel->Load(filename);
-    skel->Update();
-    skel->Draw();
+    //process command-line input
+    if (argc == 1) {
+        mode = 0;
+        skel = new Skeleton();
+        skel->Load("test.skel");
+        skel->Update();
+        skel->Draw();
+    }
+    else if (argc == 2) {
+        char* input = argv[1];
+        std::string inp = input;
+        if (inp.find(std::string("skel")) != std::string::npos) {
+            mode = 0;
+            skel = new Skeleton();
+            skel->Load(input);
+            skel->Update();
+            skel->Draw();
+        }
+        else if (inp.find(std::string("skin")) != std::string::npos) {
+            mode = 1;
+            skin = new Skin();
+            skin->Load(input);
+            skin->Update();
+            skin->BeginDraw();
+        }
+    }
+    else if (argc == 3) {
+        mode = 2;
+        char* skelput = argv[1];
+        char* skinput = argv[2];
+
+        skel = new Skeleton();
+        skel->Load(skelput);
+
+        skin = new Skin();
+        skin->Load(skinput);
+
+        skel->Update();
+        skin->Update();
+
+        skin->BeginDraw();
+    }
+
+    
+    
+    
+
+
 
 
 

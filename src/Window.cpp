@@ -1,4 +1,10 @@
 #include "Window.h"
+#include <Skin.h>
+#include <Skeleton.h>
+
+extern Skin* skin;
+extern Skeleton* skel;
+extern int mode;
 
 // Window Properties
 int Window::width;
@@ -8,6 +14,9 @@ const char* Window::windowTitle = "Model Environment";
 // Objects to render
 //Cube* Window::cube;
 std::vector<Cube*> Window::cubes;
+Skin* Window::skin = nullptr;
+bool Window::skinFlag = false;
+int Window::currentDOF = 0;
 
 // Camera Properties
 Camera* Cam;
@@ -120,9 +129,15 @@ void Window::displayCallback(GLFWwindow* window) {
 
     // Render the object.
     //cube->draw(Cam->GetViewProjectMtx(), Window::shaderProgram);
-    for (int i = 0; i < cubes.size(); i++) {
-        cubes[i]->draw(Cam->GetViewProjectMtx(), Window::shaderProgram);
+    if (!Window::skinFlag) {
+        for (int i = 0; i < cubes.size(); i++) {
+            cubes[i]->draw(Cam->GetViewProjectMtx(), Window::shaderProgram);
+        }
     }
+    else {
+        skin->Draw(Cam->GetViewProjectMtx(), Window::shaderProgram);
+    }
+    
 
     // Gets events, including input such as keyboard and mouse or window resizing.
     glfwPollEvents();
@@ -152,6 +167,54 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
 
             case GLFW_KEY_R:
                 resetCamera();
+                break;
+
+            case GLFW_KEY_A:
+                if (mode != 1) {
+                    if (currentDOF > 0) {
+                        currentDOF--;
+                        std::cout << "New DOF: " << Skeleton::DOFs[currentDOF]->GetName() << std::endl;
+                    }
+                }
+                break;
+
+            case GLFW_KEY_D:
+                if (mode != 1) {
+                    if (currentDOF < Skeleton::DOFs.size() - 1) {
+                        currentDOF++;
+                        std::cout << "New DOF: " << Skeleton::DOFs[currentDOF]->GetName() << std::endl;
+                    }
+                }
+                break;
+
+            case GLFW_KEY_W:
+                if (mode != 1) {
+                    Skeleton::DOFs[currentDOF]->SetValue(Skeleton::DOFs[currentDOF]->GetValue() + 0.1);
+                    std::cout << "New DOF Value: " << Skeleton::DOFs[currentDOF]->GetValue() << std::endl;
+                    skel->Update();
+                    if (mode == 0) {
+                        skel->Draw();
+                    }
+                    else {
+                        skin->Update();
+                        skin->BeginDraw();
+                    }
+                }
+                break;
+
+            case GLFW_KEY_S:
+                if (mode != 1) {
+                    Skeleton::DOFs[currentDOF]->SetValue(Skeleton::DOFs[currentDOF]->GetValue() - 0.1);
+                    std::cout << "New DOF Value: " << Skeleton::DOFs[currentDOF]->GetValue() << std::endl;
+                    skel->Update();
+                    if (mode == 0) {
+                        skel->Draw();
+                    }
+                    else {
+                        skin->Update();
+                        skin->BeginDraw();
+                    }
+                }
                 break;
 
             default:

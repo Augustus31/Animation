@@ -14,6 +14,7 @@ set(
     src/DOF.cpp
     src/Joint.cpp
     src/Skeleton.cpp
+    src/Skin.cpp
 )
 
 # Add header files
@@ -28,6 +29,7 @@ set(
     include/DOF.h
     include/Joint.h
     include/Skeleton.h
+    include/Skin.h
 )
 
 # Require GL

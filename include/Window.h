@@ -4,6 +4,7 @@
 #include "Cube.h"
 #include "Shader.h"
 #include "core.h"
+#include "Skin.h"
 
 class Window {
 public:
@@ -15,6 +16,9 @@ public:
     // Objects to render
     static Cube* cube;
     static std::vector<Cube*> cubes;
+    static Skin* skin;
+    static bool skinFlag;
+    static int currentDOF;
 
     // Shader Program
     static GLuint shaderProgram;

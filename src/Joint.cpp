@@ -3,6 +3,7 @@
 #include <iostream>
 #include <Cube.h>
 #include <Window.h>
+#include <Skeleton.h>
 
 Joint::Joint(Joint* parente) {
 	this->parente = parente;
@@ -17,6 +18,11 @@ Joint::Joint(Joint* parente) {
 
 void Joint::Load(Tokenizer& t) {
 	std::cout << "new call to Joint::Load" << std::endl;
+	Skeleton::joints.push_back(this);
+	std::unordered_map<int, char> dofmap({ {0, 'x'}, {1, 'y'}, {2, 'z'} });
+	char name[256];
+	t.GetToken(name);
+	std::string strname = name;
 	t.FindToken("{");
 	while (1) {
 		char temp[256];
@@ -71,6 +77,12 @@ void Joint::Load(Tokenizer& t) {
 		}
 		else if (strcmp(temp, "}") == 0) {
 			std::cout << "returning" << std::endl;
+			for (int i = 0; i < 3; i++) {
+				if (abs(dofs[i].GetMax() - dofs[i].GetMin()) > 0.1f) {
+					dofs[i].SetName(strname + " " + dofmap[i]);
+					Skeleton::DOFs.push_back(&(dofs[i]));
+				}
+			}
 			return;
 		}
 		else t.SkipLine(); // Unrecognized token
@@ -129,6 +141,19 @@ void Joint::AddChild(Joint* child) {
 
 glm::mat4 Joint::GetWorldMatrix(){
 	return worldmat;
+}
+
+void Joint::Precompute(glm::mat4 bind) {
+	precomputemat = worldmat * glm::inverse(bind);
+	precomputematnormal = glm::transpose(glm::inverse(worldmat * glm::inverse(bind)));
+}
+
+glm::mat4 Joint::GetPrecomputedMatrix() {
+	return precomputemat;
+}
+
+glm::mat4 Joint::GetPrecomputedMatrixNormal() {
+	return precomputematnormal;
 }
 
 Joint::~Joint() {
