@@ -2,9 +2,11 @@
 #include "core.h"
 #include <Skeleton.h>
 #include <Skin.h>
+#include <AnimClip.h>
 
 Skeleton* skel;
 Skin* skin;
+AnimClip* clip;
 int mode;
 
 void error_callback(int error, const char* description) {
@@ -110,10 +112,39 @@ int main(int argc, char* argv[]) {
 
         skin->BeginDraw();
     }
+    else if (argc == 4) {
+        mode = 2;
+        char* skelput = argv[1];
+        char* skinput = argv[2];
+        char* animput = argv[3];
 
-    
-    
-    
+        skel = new Skeleton();
+        skel->Load(skelput);
+
+        skin = new Skin();
+        skin->Load(skinput);
+
+        skel->Update();
+        skin->Update();
+
+        clip = new AnimClip();
+        clip->Load(animput);
+        clip->PrecomputeChannels();
+        clip->Debug();
+
+        std::cout << Skeleton::DOFs.size() << " " << clip->channels.size() << std::endl;
+        clip->Evaluate(0);
+        //std::cout << "evaluated!" << std::endl;
+
+        skel->Update();
+        skin->Update();
+        skin->BeginDraw();
+    }
+
+    //clip = new AnimClip();
+    //clip->Load("wasp_walk.anim");
+    //clip->PrecomputeChannels();
+    //clip->Debug();
 
 
 

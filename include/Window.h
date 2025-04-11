@@ -19,6 +19,7 @@ public:
     static Skin* skin;
     static bool skinFlag;
     static int currentDOF;
+    static float currentTime;
 
     // Shader Program
     static GLuint shaderProgram;

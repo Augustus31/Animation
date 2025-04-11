@@ -1,9 +1,11 @@
 #include "Window.h"
 #include <Skin.h>
 #include <Skeleton.h>
+#include <AnimClip.h>
 
 extern Skin* skin;
 extern Skeleton* skel;
+extern AnimClip* clip;
 extern int mode;
 
 // Window Properties
@@ -17,6 +19,7 @@ std::vector<Cube*> Window::cubes;
 Skin* Window::skin = nullptr;
 bool Window::skinFlag = false;
 int Window::currentDOF = 0;
+float Window::currentTime = 0;
 
 // Camera Properties
 Camera* Cam;
@@ -206,6 +209,38 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
                 if (mode != 1) {
                     Skeleton::DOFs[currentDOF]->SetValue(Skeleton::DOFs[currentDOF]->GetValue() - 0.1);
                     std::cout << "New DOF Value: " << Skeleton::DOFs[currentDOF]->GetValue() << std::endl;
+                    skel->Update();
+                    if (mode == 0) {
+                        skel->Draw();
+                    }
+                    else {
+                        skin->Update();
+                        skin->BeginDraw();
+                    }
+                }
+                break;
+
+            case GLFW_KEY_O:
+                if (mode != 1) {
+                    currentTime -= 0.1;
+                    clip->Evaluate(currentTime);
+                    std::cout << "t: " << currentTime << std::endl;
+                    skel->Update();
+                    if (mode == 0) {
+                        skel->Draw();
+                    }
+                    else {
+                        skin->Update();
+                        skin->BeginDraw();
+                    }
+                }
+                break;
+
+            case GLFW_KEY_P:
+                if (mode != 1) {
+                    currentTime += 0.1;
+                    clip->Evaluate(currentTime);
+                    std::cout << "t: " << currentTime << std::endl;
                     skel->Update();
                     if (mode == 0) {
                         skel->Draw();

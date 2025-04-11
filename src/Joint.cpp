@@ -23,6 +23,10 @@ void Joint::Load(Tokenizer& t) {
 	char name[256];
 	t.GetToken(name);
 	std::string strname = name;
+	for (int i = 0; i < 3; i++) {
+		dofs[i].SetName(strname + " " + dofmap[i]);
+		Skeleton::DOFs.push_back(&(dofs[i]));
+	}
 	t.FindToken("{");
 	while (1) {
 		char temp[256];
@@ -77,12 +81,6 @@ void Joint::Load(Tokenizer& t) {
 		}
 		else if (strcmp(temp, "}") == 0) {
 			std::cout << "returning" << std::endl;
-			for (int i = 0; i < 3; i++) {
-				if (abs(dofs[i].GetMax() - dofs[i].GetMin()) > 0.1f) {
-					dofs[i].SetName(strname + " " + dofmap[i]);
-					Skeleton::DOFs.push_back(&(dofs[i]));
-				}
-			}
 			return;
 		}
 		else t.SkipLine(); // Unrecognized token
@@ -154,6 +152,10 @@ glm::mat4 Joint::GetPrecomputedMatrix() {
 
 glm::mat4 Joint::GetPrecomputedMatrixNormal() {
 	return precomputematnormal;
+}
+
+void Joint::SetOffset(glm::vec3 off) {
+	offset = off;
 }
 
 Joint::~Joint() {

@@ -15,6 +15,12 @@ set(
     src/Joint.cpp
     src/Skeleton.cpp
     src/Skin.cpp
+    src/Keyframe.cpp
+    src/Channel.cpp
+    src/AnimClip.cpp
+    src/Particle.cpp
+    src/Triangle.cpp
+    src/SpringDamper.cpp
 )
 
 # Add header files
@@ -30,6 +36,12 @@ set(
     include/Joint.h
     include/Skeleton.h
     include/Skin.h
+    include/Keyframe.h
+    include/Channel.h
+    include/AnimClip.h
+    include/Particle.h
+    include/Triangle.h
+    include/SpringDamper.h
 )
 
 # Require GL

@@ -23,6 +23,7 @@ public:
 	void Update();
 	void Load(Tokenizer &t);
 	void Draw();
+	void SetOffset(glm::vec3 off);
 	void Precompute(glm::mat4 bind);
 	void AddChild(Joint* child);
 	glm::mat4 GetWorldMatrix();

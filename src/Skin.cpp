@@ -135,7 +135,7 @@ void Skin::Update() {
 			glm::vec4 runningSumNormals(0.0, 0.0, 0.0, 0.0);
 			for (auto w : weights[i]) {
 				glm::vec4 homopos(positions[i].x, positions[i].y, positions[i].z, 1.0f);
-				glm::vec4 homonorm(normals[i].x, normals[i].y, normals[i].z, 1.0f);
+				glm::vec4 homonorm(normals[i].x, normals[i].y, normals[i].z, 0.0f);
 				runningSum += (w.second * Skeleton::joints[w.first]->GetPrecomputedMatrix()) * homopos;
 				runningSumNormals += (w.second * Skeleton::joints[w.first]->GetPrecomputedMatrixNormal()) * homonorm;
 			}
