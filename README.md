@@ -5,7 +5,7 @@ features:
 - Smooth skinning algorithm that deforms mesh over the bones
 - Support for keyframe animations
 
-# Walking Wasp
+## Example (Wasp)
 
 ![img1](imgs/wasp1.png)
 
